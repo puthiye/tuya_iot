@@ -19,4 +19,4 @@ WantedBy=shutdown.target
 
 systemctl daemon-reload
 systemctl enable before-shutdown.service
-systemctl start before-shutdown.service
+
