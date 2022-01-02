@@ -8,7 +8,7 @@ DefaultDependencies=no
 Before=shutdown.target
 
 [Service]
-Type=simple
+Type=oneshot
 WorkingDirectory=/home/ucp/tuya_iot/
 ExecStart=/usr/bin/python set_countdown.py
 TimeoutStartSec=0
