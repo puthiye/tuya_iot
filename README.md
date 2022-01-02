@@ -1,6 +1,6 @@
 # tuya_iot
 
-for **set_countdown.py **to get executed before shutdown use the below settings
+for set_countdown.py to get executed before shutdown use the below settings
 
 [Unit]
 Description=Run my custom task at shutdown
