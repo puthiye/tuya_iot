@@ -37,7 +37,6 @@ headers_command = {
 key = 'XXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 #form the access token parameters
-#sign = hmac(key/secret, client_id + timestamp)
 data_tok = headers_token['client_id'] + today_unixtime
 sign_tok = hmac.new(key.encode('utf-8'), data_tok.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
@@ -53,7 +52,6 @@ print(resp_json)
 
 
 #form the command parameters
-#sign = hmac(key/secret, client_id + access_token + timestamp)
 data_cmd = headers_command['client_id'] + resp_json['result']['access_token'] + today_unixtime
 sign_cmd = hmac.new(key.encode('utf-8'), data_cmd.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
