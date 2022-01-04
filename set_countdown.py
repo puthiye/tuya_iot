@@ -64,12 +64,6 @@ def send_command(method, url_command, payload):
 
   print(response.text)
 
- 
-method = "PUT"
-url_command = "https://openapi.tuyaus.com/v1.0/iot-03/devices/" + device_id
-#set name as API triggered
-payload = "{\"name\": \"SmartX1_API_Triggered\"}"
-send_command(method, url_command, payload)
 
 method = "POST"
 url_command = "https://openapi.tuyaus.com/v1.0/devices/" + device_id + "/commands"
