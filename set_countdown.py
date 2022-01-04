@@ -14,8 +14,6 @@ today_time = int((mod_time.mktime(today.timetuple())))
 today_unixtime = str((today_time*1000))
 
 url_token = "https://openapi.tuyaus.com/v1.0/token?grant_type=1"
-#url_command = "https://openapi.tuyaus.com/v1.0/devices/" + device_id + "/commands"
-#url_command = "https://openapi.tuyaus.com/v1.1/iot-03/devices/" + device_id
 
 #client_id, key = get this value from project - iot.tuya.com
 headers_token = {
