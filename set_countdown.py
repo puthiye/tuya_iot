@@ -14,57 +14,67 @@ today_time = int((mod_time.mktime(today.timetuple())))
 today_unixtime = str((today_time*1000))
 
 url_token = "https://openapi.tuyaus.com/v1.0/token?grant_type=1"
-url_command = "https://openapi.tuyaus.com/v1.0/devices/" + device_id + "/commands"
-
-#set countdown time
-payload="{\n\t\"commands\":[\n\t\t{\n\t\t\t\"code\": \"countdown_1\",\n\t\t\t\"value\":120\n\t\t}\n\t]\n}"
+#url_command = "https://openapi.tuyaus.com/v1.0/devices/" + device_id + "/commands"
+#url_command = "https://openapi.tuyaus.com/v1.1/iot-03/devices/" + device_id
 
 #client_id, key = get this value from project - iot.tuya.com
-
 headers_token = {
-  'client_id': 'XXXXXXXXXXXXXXXXXXXXXXX',
+  'client_id': 'ckjwhruaa5nsvfwbjltf',
   'sign_method': 'HMAC-SHA256'
 }
 
 
 headers_command = {
-  'client_id': 'XXXXXXXXXXXXXXXXXXXXXXX',
+  'client_id': 'ckjwhruaa5nsvfwbjltf',
   'sign_method': 'HMAC-SHA256',
   'Content-Type': 'application/json'
 }
 
 #secret
-key = 'XXXXXXXXXXXXXXXXXXXXXXXXX'
+key = '366106568dbf4d79bb9aa4a146c60280'
 
-#form the access token parameters
-#sign = hmac(key/secret, client_id + timestamp)
-data_tok = headers_token['client_id'] + today_unixtime
-sign_tok = hmac.new(key.encode('utf-8'), data_tok.encode('utf-8'), hashlib.sha256).hexdigest().upper()
+def send_command(method, url_command, payload):
 
-
-headers_token['t'] = today_unixtime
-headers_token['sign'] = sign_tok
-
-#get access_token
-response = requests.request("GET", url_token, headers=headers_token, data=payload)
-resp_json = response.json()
-print("Access token received....")
-print(resp_json)
+  #form the access token parameters
+  data_tok = headers_token['client_id'] + today_unixtime
+  sign_tok = hmac.new(key.encode('utf-8'), data_tok.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
 
-#form the command parameters
-#sign = hmac(key/secret, client_id + access_token + timestamp)
-data_cmd = headers_command['client_id'] + resp_json['result']['access_token'] + today_unixtime
-sign_cmd = hmac.new(key.encode('utf-8'), data_cmd.encode('utf-8'), hashlib.sha256).hexdigest().upper()
+  headers_token['t'] = today_unixtime
+  headers_token['sign'] = sign_tok
 
-headers_command['access_token'] = resp_json['result']['access_token']
-headers_command['sign'] = sign_cmd
-headers_command['t'] = today_unixtime
-
-print("Sending command to device...")
+  #get access_token
+  response = requests.request("GET", url_token, headers=headers_token, data=payload)
+  resp_json = response.json()
+  print("Access token received....")
+  print(resp_json)
 
 
-#send command to device
-response = requests.request("POST", url_command, headers=headers_command, data=payload)
+  #form the command parameters
+  data_cmd = headers_command['client_id'] + resp_json['result']['access_token'] + today_unixtime
+  sign_cmd = hmac.new(key.encode('utf-8'), data_cmd.encode('utf-8'), hashlib.sha256).hexdigest().upper()
 
-print(response.text)
+  headers_command['access_token'] = resp_json['result']['access_token']
+  headers_command['sign'] = sign_cmd
+  headers_command['t'] = today_unixtime
+
+  print("Sending command to device...")
+
+
+  #send command to device
+  response = requests.request(method, url_command, headers=headers_command, data=payload)
+
+  print(response.text)
+
+ 
+method = "PUT"
+url_command = "https://openapi.tuyaus.com/v1.0/iot-03/devices/" + device_id
+#set name as API triggered
+payload = "{\"name\": \"SmartX1_API_Triggered\"}"
+send_command(method, url_command, payload)
+
+method = "POST"
+url_command = "https://openapi.tuyaus.com/v1.0/devices/" + device_id + "/commands"
+#set countdown time
+payload="{\n\t\"commands\":[\n\t\t{\n\t\t\t\"code\": \"countdown_1\",\n\t\t\t\"value\":120\n\t\t}\n\t]\n}"
+send_command(method, url_command, payload)
